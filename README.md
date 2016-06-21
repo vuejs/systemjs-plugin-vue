@@ -73,6 +73,8 @@ System.config({
 })
 ```
 
+Or, alternatively, create a `vue.config.js` file at the root of your project, and export the configuration object.
+
 ### Passing Options to Pre-Processors
 
 Just add a nested object under `vue`:
@@ -85,6 +87,23 @@ System.config({
     }
   }
 })
+```
+
+### Custom Lang Compiler
+
+You can provide custom `lang` compilers under the `compilers` option. It is recommended to use `vue.config.js` for custom compilers, and in most cases you will want to import your Node dependencies as raw Node modules:
+
+``` js
+// vue.config.js
+export default {
+  compilers: {
+    'my-lang' (raw, filename) {
+      return System.import('@node/my-lang').then(myLang => {
+        return myLang.compile(raw) // assumes returning a promise
+      })
+    }
+  }
+}
 ```
 
 ### PostCSS Configuration
@@ -106,7 +125,7 @@ Use `vue.postcss` in your SystemJS config file. The option can be:
   })
   ```
 
-- An object containing `options` (passed to `postcss.process()`) and `plugins`. The parser and stringifier options are expected to be string module names and will be resolved automatically.
+- An object containing `options` (passed to `postcss.process()`) and `plugins`. The parser and stringifier options can also be string module names and will be resolved automatically.
 
   Example:
 
@@ -122,3 +141,5 @@ Use `vue.postcss` in your SystemJS config file. The option can be:
     }
   })
   ```
+
+If using `vue.config.js`, you can also directly provide the imported plugins instead of string module names.
