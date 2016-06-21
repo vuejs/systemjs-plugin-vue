@@ -1,0 +1,33 @@
+{
+  "name": "systemjs-plugin-vue",
+  "version": "1.0.0",
+  "description": "SystemJS plugin for single file Vue components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/systemjs-plugin-vue.git"
+  },
+  "keywords": [
+    "vue",
+    "systemjs",
+    "jspm"
+  ],
+  "author": "Evan You",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/systemjs-plugin-vue/issues"
+  },
+  "homepage": "https://github.com/vuejs/systemjs-plugin-vue#readme",
+  "dependencies": {
+    "cssnano": "^3.7.1",
+    "falafel": "^1.2.0",
+    "lru-cache": "^4.0.1",
+    "object-assign": "^4.1.0",
+    "postcss": "^5.0.21",
+    "postcss-selector-parser": "^2.1.0",
+    "vue-template-compiler": "^2.0.0-alpha.5"
+  }
+}
