@@ -1,33 +1,51 @@
+var fs = require('fs')
 var vueCompiler = require('vue-template-compiler')
 var falafel = require('falafel')
 var rewriteCSS = require('./lib/style-rewriter.js')
 var genId = require('./lib/gen-id.js')
 var defaultLangs = require('./lib/langs/index.js')
+var normalizeImport = require('./lib/normalize-import')
 
 exports.translate = function (load, opts) {
-  var vueOpts = this.vue || {}
+  if (fs.existsSync('vue.config.js')) {
+    return normalizeImport('vue.config.js').then(vueOpts => {
+      return compile(load, opts, vueOpts)
+    })
+  } else {
+    return compile(load, opts, this.vue || {})
+  }
+}
+
+function compile (load, opts, vueOpts) {
   var langs = Object.assign({}, defaultLangs, vueOpts.compilers)
-  return new Promise((resolve, reject) => {
+  var sfc = load.metadata.sfc = vueCompiler.parseComponent(load.source, { pad: true })
+  // normalize potential custom compilers
+  var normalizeLangs = Object.keys(langs).map(lang => normalizeImport(langs[lang]))
+  return Promise.all(normalizeLangs).then(() => {
     // resolve lang="xxx" for all parts
-    var sfc = vueCompiler.parseComponent(load.source, { pad: true })
-    var promises = []
+    var langsPromises = []
     var scriptCompiler = sfc.script && sfc.script.lang && langs[sfc.script.lang]
     if (scriptCompiler) {
-      promises.push(scriptCompiler(sfc.script.content, load.name, vueOpts))
+      langsPromises.push(scriptCompiler(sfc.script.content, load.name, vueOpts).then(script => {
+        sfc.script.content = script
+      }))
     }
     var templateCompiler = sfc.template && sfc.template.lang && langs[sfc.template.lang]
     if (templateCompiler) {
-      promises.push(templateCompiler(sfc.template.content, load.name, vueOpts))
+      langsPromises.push(templateCompiler(sfc.template.content, load.name, vueOpts).then(template => {
+        sfc.template.content = template
+      }))
     }
-    sfc.styles.forEach(s => {
+    sfc.styles.forEach((s, i) => {
       var compiler = s.lang && langs[s.lang]
       if (compiler) {
-        promises.push(compiler(s.content, load.name, vueOpts))
+        langsPromises.push(compiler(s.content, load.name, vueOpts).then(css => {
+          sfc.styles[i].content = css
+        }))
       }
     })
-    return Promise.all(promises)
-  }).then(sfc => {
-    load.metadata.sfc = sfc
+    return Promise.all(langsPromises)
+  }).then(() => {
     // style
     var hasScoped = sfc.styles.some(s => s.scoped)
     var scopeId = hasScoped ? 'data-v-' + genId(load.name) : null
