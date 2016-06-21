@@ -77,7 +77,12 @@ function compile (load, opts, vueOpts) {
         sourceType: 'module'
       }, node => {
         if (node.type === 'ObjectExpression') {
-          if (node.parent && node.parent.type === 'ExportDefaultDeclaration') {
+          if (node.parent && (
+            node.parent.type === 'ExportDefaultDeclaration' || (
+              node.parent.type === 'AssignmentExpression' &&
+              node.parent.left.source() === 'module.exports'
+            )
+          )) {
             node.update(node.source().replace(/^\{/,
               `{render:__renderFns__.render,` +
               `staticRenderFns:__renderFns__.staticRenderFns,` +
