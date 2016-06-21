@@ -35,15 +35,11 @@ You can use [this vue-cli template](https://github.com/vuejs-templates/systemjs)
 
 - CSS are automatically extracted across all components and injected as a single `<style>` tag
 
-## Caveats
-
-- This doesn't work for in-browser JIT compilation due to multiple Node dependencies. Use `jspm bundle -wid` during development, it's faster anyway.
-
-- SystemJS' hot reload mechanism is quite limiting and it's currently not possible to support the same level of hot-reload available in `vue-loader` and `vueify`.
-
 ## Pre-Processors
 
-To enable a pre-processor, you need to install the corresponding pre-processor module **via npm, not jspm**. Example:
+To enable a pre-processor, you need to install the corresponding pre-processor module **via npm, not jspm**. Note that if you are using any non-babel pre-processors, then in-browser JIT compilation will not work due to Node dependencies. Use `jspm bundle -wid` during development, it's faster anyway.
+
+Example:
 
 ``` bash
 npm install less --save-dev
@@ -145,3 +141,7 @@ Use `vue.postcss` in your SystemJS config file. The option can be:
   ```
 
 If using `vue.config.js`, you can also directly provide the imported plugins instead of string module names.
+
+## Caveats
+
+- SystemJS' hot reload mechanism is quite limiting and it's currently not possible to support the same level of hot-reload available in `vue-loader` and `vueify`.

@@ -7,7 +7,8 @@ var defaultLangs = require('./lib/langs/index.js')
 var normalizeImport = require('./lib/normalize-import')
 
 exports.translate = function (load, opts) {
-  if (fs.existsSync('vue.config.js')) {
+  opts = opts || {}
+  if (fs.existsSync && fs.existsSync('vue.config.js')) {
     return normalizeImport('vue.config.js').then(vueOpts => {
       return compile(load, opts, vueOpts)
     })
@@ -92,7 +93,7 @@ function compile (load, opts, vueOpts) {
         }
       })
 
-      script = `var __renderFns__ = System.get(${templateModuleName});` + script
+      script = `var __renderFns__ = System.get(${JSON.stringify(templateModuleName)});` + script
     }
     return script
   })
@@ -125,13 +126,16 @@ function injectStyle (style) {
 }
 
 function getTemplateModuleName (name) {
-  return JSON.stringify(System.getCanonicalName(name) + '.template')
+  if (System.getCanonicalName) {
+    name = System.getCanonicalName(name)
+  }
+  return name + '.template'
 }
 
 function compileTemplateAsModule (name, template) {
   name = getTemplateModuleName(name)
   var fns = vueCompiler.compile(template)
-  return `System.set(${name},System.newModule({\n` +
+  return `System.set(${JSON.stringify(name)},System.newModule({\n` +
     `render:${toFn(fns.render)},\n` +
     `staticRenderFns:[${fns.staticRenderFns.map(toFn).join(',')}]\n` +
   `}));`
