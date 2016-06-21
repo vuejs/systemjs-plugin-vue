@@ -25,7 +25,6 @@
     "cssnano": "^3.7.1",
     "falafel": "^1.2.0",
     "lru-cache": "^4.0.1",
-    "object-assign": "^4.1.0",
     "postcss": "^5.0.21",
     "postcss-selector-parser": "^2.1.0",
     "vue-template-compiler": "^2.0.0-alpha.5"
