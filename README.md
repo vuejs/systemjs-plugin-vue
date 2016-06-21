@@ -21,6 +21,8 @@ System.config({
 })
 ```
 
+You can use [this vue-cli template](https://github.com/vuejs-templates/systemjs) to scaffold an example project.
+
 ## Features
 
 - ES2015 by default (requires `systemsjs-plugin-babel`)
