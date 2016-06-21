@@ -4,9 +4,10 @@
 
 ## Usage
 
-This plugin is only tested with jspm 0.17+.
+This plugin is only tested with jspm 0.17+ and Vue.js 2.0+.
 
 ``` bash
+jspm install npm:vue@2.0.0-alpha.5
 jspm install --dev npm:systemjs-plugin-vue
 ```
 
@@ -28,6 +29,8 @@ System.config({
 - PostCSS support
 
 ## Caveats
+
+- This most likely won't work for in-browser JIT compilation. Use `jspm bundle -wid` during development.
 
 - It's quite difficult to get big Node dependencies work properly in SystemJS' plugin system (e.g. Less, SASS...), so currently pre-processors via `lang="xxx"` are not supported. However PostCSS is supported (see config below).
 
