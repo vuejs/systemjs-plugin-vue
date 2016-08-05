@@ -2,6 +2,10 @@
 
 > SystemJS plugin for Vue single file components
 
+## !!! Maintenance Status !!!
+
+This project is currently on hold, and it may not work properly with the latest Vue 2.0 versions. This is because the interest in using SystemJS with Vue doesn't seem to justify the effort required to maintain this plugin. If you are interested in taking over the maintenance of this project, please open an issue!
+
 ## Usage
 
 This plugin is only tested with jspm 0.17+ and Vue.js 2.0+.
