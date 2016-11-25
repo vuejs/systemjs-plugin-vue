@@ -29,7 +29,7 @@ You can use [this vue-cli template](https://github.com/vuejs-templates/systemjs)
 
 ## Features
 
-- ES2015 by default (requires `systemsjs-plugin-babel`)
+- ES2015 by default (requires `systemjs-plugin-babel`)
 
 - `lang="xxx"` pre-processors
 
